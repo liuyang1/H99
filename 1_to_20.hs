@@ -110,3 +110,13 @@ rotate xs n = rotateI xs (mod n (length xs))
 -- 20
 removeAt (x: xs) 0 = (x, xs)
 removeAt (x: xs) n = let (d, t) = removeAt xs (n - 1) in (d, x: t)
+
+-- 21
+insertAt v xs 0 = v: xs
+insertAt v (x: xs) n = x: (insertAt v xs (n - 1))
+
+-- 22
+ranger b e =
+    if b == e
+    then [b]
+    else b: ranger (b + 1) e
