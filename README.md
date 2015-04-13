@@ -4,10 +4,9 @@ Haskell 99 solution
 ## TODO
 - 23..25        random
 - 50            huffman
-- 59            hbal tree node
+- 61..69        binary tree
 
 ## TBD
-- 61..69        binary tree
 - 70..73        multiway tree
 - 80..89        graph
 - 90..94        miscellaneous problems

@@ -36,7 +36,21 @@ hbalTree c n = let tn1 = hbalTree c (n - 1)
                    tn2 = hbalTree c (n - 2)
                 in [Branch c t1 t2 | t1 <- tn1, t2 <- tn2]
                 ++ [Branch c t1 t2 | t1 <- tn2, t2 <- tn1]
-                ++ [Branch c t1 t2 | t1 <- tn2, t2 <- tn2]
+                ++ [Branch c t1 t2 | t1 <- tn1, t2 <- tn1]
 
 -- 60
--- TODO
+maxNodes h = 2 ^ h - 1
+minNodes 0 = 0
+minNodes 1 = 1
+minNodes h = 1 + minNodes (h - 1) + minNodes (h - 2)
+maxHeightHlp n h = if n >= minNodes h then maxHeightHlp n (h + 1) else h - 1
+maxHeight n = maxHeightHlp n 0
+minHeight n = ceiling $ logBase 2 (n + 1)
+
+cntNode Empty = 0
+cntNode (Branch _ t0 t1) = 1 + cntNode t0 + cntNode t1
+
+hbalTreeNodes c n = let minh = minHeight n
+                        maxh = maxHeight n
+                        tn = concatMap (hbalTree c) [minh..maxh]
+                     in [t | t <- tn, cntNode t == n]
