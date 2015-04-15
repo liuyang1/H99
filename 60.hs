@@ -41,3 +41,49 @@ completeBinaryTree n = let h = (minHeight n) - 1
                            nl = if dn > thr then ml else dn - mr
                            nr = if dn > thr then dn - ml else mr
                         in Branch "x" (completeBinaryTree nl) (completeBinaryTree nr)
+
+-- 64
+rightest (Branch (_, (v, _)) _ Empty) = v
+rightest (Branch (_, (_, _)) _ t) = rightest t
+layout t = layouth t 1 1
+
+layouth Empty _ _ = Empty
+layouth (Branch c tl tr) ox oy = let nl = layouth tl ox (oy + 1)
+                                     nx = if nl /= Empty then 1 + rightest nl else ox
+                                     nr = layouth tr (nx + 1) (oy + 1)
+                                  in Branch (c, (nx , oy)) nl nr
+
+-- 65
+width Empty = 0
+width (Branch _ Empty Empty) = 1
+width (Branch _ tl tr) = 1 + 2 * max (width tl) (width tr)
+layout65 Empty _ _ = Empty
+layout65 (Branch c tl tr) ox oy = let w = max (width tl) (width tr)
+                                      nl = layout65 tl ox (oy + 1)
+                                      nr = layout65 tr (ox + w + 1) (oy + 1)
+                                   in Branch (c, (ox + w, oy)) nl nr
+
+tree64 = Branch 'n'
+                (Branch 'k'
+                        (Branch 'c'
+                                (Branch 'a' Empty Empty)
+                                (Branch 'h'
+                                        (Branch 'g'
+                                                (Branch 'e' Empty Empty)
+                                                Empty
+                                        )
+                                        Empty
+                                )
+                        )
+                        (Branch 'm' Empty Empty)
+                )
+                (Branch 'u'
+                        (Branch 'p'
+                                Empty
+                                (Branch 's'
+                                        (Branch 'q' Empty Empty)
+                                        Empty
+                                )
+                        )
+                        Empty
+                )
