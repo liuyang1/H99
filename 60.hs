@@ -63,6 +63,42 @@ layout65 (Branch c tl tr) ox oy = let w = max (width tl) (width tr)
                                       nr = layout65 tr (ox + w + 1) (oy + 1)
                                    in Branch (c, (ox + w, oy)) nl nr
 
+-- 66
+layout66 Empty _ _ = Empty
+-- layout66 (Branch c tl tr) ox oy = let w 
+
+-- 67
+indexFirsth c [] pos = -1
+indexFirsth c (h:t) pos = if c == h then pos else indexFirsth c t (pos + 1)
+indexFirst c s = indexFirsth c s 0
+indexLasth c [] pos mc = mc
+indexLasth c (h:t) pos mc = let nmc = if h /= c then mc else pos
+                             in indexLasth c t (pos + 1) nmc
+indexLast c s = indexLasth c s 0 (-1)
+substr s h d = take (d - h) $ drop h s
+indexInfixh [] cnt pos = -1
+indexInfixh (h:t) cnt pos = let nc = if h == '(' then cnt + 1 else if h == ')' then cnt - 1 else cnt
+                             in if h == ',' && cnt == 1 then pos else indexInfixh t nc (pos + 1)
+indexInfix s = indexInfixh s 0 0
+
+stringToTree "" = Empty
+stringToTree x = let p0 = indexFirst '(' x
+                     p1 = indexInfix x
+                     p2 = indexLast ')' x
+                     node = if p0 == -1 then x else substr x 0 p0
+                     left = substr x (p0 + 1) p1
+                     right = substr x (p1 + 1) ((length x) - 1)
+                  in if node == ""
+                        then Empty
+                        else Branch node (stringToTree left) (stringToTree right)
+
+-- 69
+tree2ds Empty = "."
+tree2ds (Branch a tl tr) = a: tree2ds tl ++ tree2ds tr
+
+-- ds2tree need more work
+ds2tree "." = Empty
+
 tree64 = Branch 'n'
                 (Branch 'k'
                         (Branch 'c'
